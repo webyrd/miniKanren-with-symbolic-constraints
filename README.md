@@ -11,22 +11,36 @@ For example, `(run (q r s) (== (cons r q) s))`.
 
 ## Running
 
-In Chez or Vicare, `(load "mk.scm")`. In Racket, `(require "mk.rkt")`.
-
-## Running Tests
-
-To run the tests, load `test-all.scm`
-
-In Chez or Vicare:
+### Chez and Vicare
 
 ```
 (load "mk.scm")
-(load "test-all.scm")
 ```
 
-In Racket:
+### Racket
 
 ```
 (require "mk.rkt")
+```
+
+### Guile
+
+```
+(load "mk-guile.scm")
+```
+
+### Chicken
+
+```
+(load "mk-chicken.scm")
+```
+
+## Running Tests
+
+After loading miniKanren as above,
+
+```
 (load "test-all.scm")
 ```
+
+regardless of scheme implementation.
