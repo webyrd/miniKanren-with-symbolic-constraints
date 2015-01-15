@@ -6,5 +6,11 @@ Good for writing Quine-generating interpreters, etc.  :)
 
 Also includes `eigen`, which represents universally quanitifed variables.  Beware:  this implementation does *not* support use of `eigen` with constraints other than `==`.
 
-Also includes multi-query variable version of `run`.
-For example, `(run (q r s) (== (cons r q) s))`.
+Also includes multi-query variable version of `run`. For example:
+
+`(run (q r s) (== (cons r q) s))`.
+
+
+To run the tests, load `test-all.scm`:
+
+`(load "test-all.scm")`
