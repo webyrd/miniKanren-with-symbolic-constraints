@@ -16,8 +16,6 @@
 ;;; abandons E, if it succeeds.  If there is no failure by then, there were no eigen
 ;;; violations.
 
-(define sort list-sort)
-
 (define empty-c '(() () () () () () ()))
 
 (define eigen-tag (vector 'eigen-tag))
@@ -333,7 +331,7 @@
 
 (define sorter
   (lambda (ls)
-    (sort lex<=? ls)))
+    (list-sort lex<=? ls)))
                               
 (define lex<=?
   (lambda (x y)
@@ -800,7 +798,7 @@
 
 (define sort-d
   (lambda (d)
-    (sort
+    (list-sort
        (lambda (x y)
          (lex<=? (car x) (car y)))
        (map sort-pr d))))

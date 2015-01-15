@@ -1,5 +1,3 @@
-(load "mk.scm")
-
 (test "numbero-1"
   (run* (q) (numbero q))
   '((_.0 (num _.0))))

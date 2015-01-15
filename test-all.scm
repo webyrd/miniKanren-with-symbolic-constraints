@@ -1,4 +1,3 @@
-(load "mk.scm")
 (load "test-check.scm")
 
 (printf "==-tests\n")

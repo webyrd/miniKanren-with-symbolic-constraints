@@ -8,3 +8,24 @@ Also includes `eigen`, which represents universally quanitifed variables.  Bewar
 
 Also includes multi-query variable version of `run`.
 For example, `(run (q r s) (== (cons r q) s))`.
+
+## Running
+
+In Chez or Vicare, `(load "mk.scm")`. In Racket, `(require "mk.rkt")`.
+
+## Running Tests
+
+In Chez or Vicare:
+
+```
+(load "mk.scm")
+(load "test-all.scm")
+```
+
+In Racket:
+
+```
+(require "mk.rkt")
+(load "test-all.scm")
+```
+
