@@ -15,6 +15,8 @@ In Chez or Vicare, `(load "mk.scm")`. In Racket, `(require "mk.rkt")`.
 
 ## Running Tests
 
+To run the tests, load `test-all.scm`
+
 In Chez or Vicare:
 
 ```
@@ -28,4 +30,3 @@ In Racket:
 (require "mk.rkt")
 (load "test-all.scm")
 ```
-
