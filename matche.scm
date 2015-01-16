@@ -3,11 +3,14 @@
 ;
 ; https://github.com/calvis/cKanren/blob/dev/cKanren/matche.rkt#L54
 
+; Note that this definition is available at syntax phase in chez and vicare due to implicit
+; phasing, but not in Racket (which uses explicit phasing). Racket already has a version available
+; by default though, so that's fine. This definition isn't just isn't used in Racket.
 (define syntax->list
   (lambda (e)
     (syntax-case e ()
       [() '()]
-      [(x . r) (cons #'x (syntax->list #'r))]))) 
+      [(x . r) (cons #'x (syntax->list #'r))])))
 
 (define-syntax defmatche
   (lambda (stx)
@@ -83,8 +86,8 @@
                   [else (loop pat)])]
                [else (loop pat)])))
          (unless
-             (andmap (lambda (y) (= (length (syntax->list #'(v ...))) (length y)))                
-                     (syntax->list #'([pat ...] ...)))
+             (andmap (lambda (y) (= (length (syntax->datum #'(v ...))) (length y)))
+                     (syntax->datum #'([pat ...] ...)))
            (error 'matche "pattern wrong length blah"))
          (with-syntax ([(([pat^ ...] (c ...) (x ...)) ...)
                         (map (lambda (y) (parse-pattern #'(v ...) y))
