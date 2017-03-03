@@ -44,7 +44,7 @@
 (define rhs
   (lambda (pr)
     (cdr pr)))
- 
+
 (define lhs
   (lambda (pr)
     (car pr)))
@@ -99,8 +99,8 @@
     (let ((v (walk v s)))
       (cond
         ((var? v) (eq? v x))
-        ((pair? v) 
-         (or 
+        ((pair? v)
+         (or
            (occurs-check x (car v) s)
            (occurs-check x (cdr v) s)))
         (else #f)))))
@@ -111,8 +111,8 @@
       (cond
         ((var? x) #f)
         ((eigen? x) (memq x e*))
-        ((pair? x) 
-         (or 
+        ((pair? x)
+         (or
            (eigen-occurs-check e* (car x) s)
            (eigen-occurs-check e* (cdr x) s)))
         (else #f)))))
@@ -125,10 +125,10 @@
       ((occurs-check x v s) #f)
       (else (cons `(,x . ,v) s)))))
 
-(define unify*  
+(define unify*
   (lambda (S+ S)
     (unify (map lhs S+) (map rhs S+) S)))
- 
+
 (define-syntax case-inf
   (syntax-rules ()
     ((_ e (() e0) ((f^) e1) ((c^) e2) ((c f) e3))
@@ -139,7 +139,7 @@
          ((not (and (pair? c-inf)
                  (procedure? (cdr c-inf))))
           (let ((c^ c-inf)) e2))
-         (else (let ((c (car c-inf)) (f (cdr c-inf))) 
+         (else (let ((c (car c-inf)) (f (cdr c-inf)))
                  e3)))))))
 
 (define-syntax fresh
@@ -183,17 +183,17 @@
           empty-c))))
     ((_ n (q0 q1 q ...) g0 g ...)
      (run n (x) (fresh (q0 q1 q ...) g0 g ... (== `(,q0 ,q1 ,q ...) x))))))
- 
+
 (define-syntax run*
   (syntax-rules ()
     ((_ (q0 q ...) g0 g ...) (run #f (q0 q ...) g0 g ...))))
- 
+
 (define take
   (lambda (n f)
     (cond
       ((and n (zero? n)) '())
       (else
-       (case-inf (f) 
+       (case-inf (f)
          (() '())
          ((f) (take n f))
          ((c) (cons c '()))
@@ -204,17 +204,17 @@
   (syntax-rules ()
     ((_ (g0 g ...) (g1 g^ ...) ...)
      (lambdag@ (c)
-       (inc 
+       (inc
          (mplus*
            (bind* (g0 c) g ...)
            (bind* (g1 c) g^ ...) ...))))))
- 
+
 (define-syntax mplus*
   (syntax-rules ()
     ((_ e) e)
     ((_ e0 e ...) (mplus e0
                     (lambdaf@ () (mplus* e ...))))))
- 
+
 (define mplus
   (lambda (c-inf f)
     (case-inf c-inf
@@ -239,7 +239,7 @@
        (inc
          (ifa ((g0 c) g ...)
               ((g1 c) g^ ...) ...))))))
- 
+
 (define-syntax ifa
   (syntax-rules ()
     ((_) (mzero))
@@ -258,7 +258,7 @@
        (inc
          (ifu ((g0 c) g ...)
               ((g1 c) g^ ...) ...))))))
- 
+
 (define-syntax ifu
   (syntax-rules ()
     ((_) (mzero))
@@ -332,17 +332,17 @@
 (define sorter
   (lambda (ls)
     (list-sort lex<=? ls)))
-                              
+
 (define lex<=?
   (lambda (x y)
     (string<=? (datum->string x) (datum->string y))))
-  
+
 (define datum->string
   (lambda (x)
     (call-with-string-output-port
       (lambda (p) (display x p)))))
 
-(define anyvar? 
+(define anyvar?
   (lambda (u r)
     (cond
       ((pair? u)
@@ -350,7 +350,7 @@
            (anyvar? (cdr u) r)))
       (else (var? (walk u r))))))
 
-(define anyeigen? 
+(define anyeigen?
   (lambda (u r)
     (cond
       ((pair? u)
@@ -358,7 +358,7 @@
            (anyeigen? (cdr u) r)))
       (else (eigen? (walk u r))))))
 
-(define member* 
+(define member*
   (lambda (u v)
     (cond
       ((equal? u v) #t)
@@ -474,7 +474,7 @@
 
 (define sym?
   (lambda (S Y y)
-    (let ((y (walk y S)))          
+    (let ((y (walk y S)))
       (cond
         ((var? y) (tagged? S Y y))
         (else (symbol? y))))))
@@ -599,7 +599,7 @@
         (else
          (let ((c^^ ((car fns^) c^)))
            (cond
-             ((not (eq? c^^ c^))                                    
+             ((not (eq? c^^ c^))
               (loop c^^ (cdr fns^) (length (LOF))))
              (else (loop c^ (cdr fns^) (sub1 n))))))))))
 
@@ -607,15 +607,15 @@
   (lambda (u v)
     (lambdag@ (c : B E S D Y N T)
       (cond
-        [(mem-check u v S) (mzero)]
-        [else (unit `(,B ,E ,S ,D ,Y ,N ((,u . ,v) . ,T)))]))))
+        ((mem-check u v S) (mzero))
+        (else (unit `(,B ,E ,S ,D ,Y ,N ((,u . ,v) . ,T))))))))
 
 (define eigen-absento
   (lambda (e* x*)
     (lambdag@ (c : B E S D Y N T)
       (cond
-        [(eigen-occurs-check e* x* S) (mzero)]
-        [else (unit `(,B ((,e* . ,x*) . ,E) ,S ,D ,Y ,N ,T))]))))
+        ((eigen-occurs-check e* x* S) (mzero))
+        (else (unit `(,B ((,e* . ,x*) . ,E) ,S ,D ,Y ,N ,T)))))))
 
 (define mem-check
   (lambda (u t S)
@@ -642,7 +642,7 @@
         (cond
           ((var? u) #f)
           (else (not (pred u))))))))
-;; moved 
+;; moved
 (define ground-non-symbol?
   (ground-non-<type>? symbol?))
 
@@ -653,17 +653,17 @@
   (lambda (u)
     (lambdag@ (c : B E S D Y N T)
       (cond
-        [(ground-non-symbol? u S) (mzero)]
-        [(mem-check u N S) (mzero)]
-        [else (unit `(,B ,E ,S ,D (,u . ,Y) ,N ,T))]))))
+        ((ground-non-symbol? u S) (mzero))
+        ((mem-check u N S) (mzero))
+        (else (unit `(,B ,E ,S ,D (,u . ,Y) ,N ,T)))))))
 
-(define numbero 
+(define numbero
   (lambda (u)
     (lambdag@ (c : B E S D Y N T)
       (cond
-        [(ground-non-number? u S) (mzero)]
-        [(mem-check u Y S) (mzero)]
-        [else (unit `(,B ,E ,S ,D ,Y (,u . ,N) ,T))]))))
+        ((ground-non-number? u S) (mzero))
+        ((mem-check u Y S) (mzero))
+        (else (unit `(,B ,E ,S ,D ,Y (,u . ,N) ,T)))))))
 ;; end moved
 
 (define =/= ;; moved
@@ -753,7 +753,7 @@
                                     (anyvar? dw R)
                                     (anyeigen? dw R))))
                                (rem-xx-from-d c))))
-                      (rem-subsumed D)) 
+                      (rem-subsumed D))
                     (remp
                      (lambda (y) (var? (walk y R)))
                      Y)
@@ -833,7 +833,7 @@
          (rem-subsumed (cdr D) d^*))
         (else (rem-subsumed (cdr D)
                 (cons (car D) d^*)))))))
- 
+
 (define subsumed?
   (lambda (d d*)
     (cond
@@ -858,7 +858,7 @@
                      (else #f)))
                  D)))))
 
-(define rem-subsumed-T 
+(define rem-subsumed-T
   (lambda (T)
     (let rem-subsumed ((T T) (T^ '()))
       (cond
@@ -873,7 +873,7 @@
              (else (rem-subsumed (cdr T)
                      (cons (car T) T^))))))))))
 
-(define subsumed-T? 
+(define subsumed-T?
   (lambda (lit big T)
     (cond
       ((null? T) #f)
