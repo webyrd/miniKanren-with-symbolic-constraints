@@ -3,7 +3,7 @@
 (require racket/trace)
 
 
-(provide run run*
+(provide run run* succeed fail
          == =/=
          fresh eigen
          conde conda condu
